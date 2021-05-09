@@ -4,13 +4,14 @@ on:
   check_suite:
     types:
       - completed
+  status: {}
 
 jobs:
   automerge:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
-      - name: Merge me!
-        uses: ridedott/merge-me-action@master
-        with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_LOGIN: snyk-bot
+      - name: automerge
+        uses: "pascalgn/automerge-action@v0.13.1"
+        env:
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          MERGE_FILTER_AUTHOR:  snyk-bot
