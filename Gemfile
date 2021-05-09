@@ -1,7 +1,7 @@
 ruby '2.6.5'
 source 'https://rubygems.org'
 gem 'sinatra'
-gem 'activerecord'
+gem 'activerecord', '>= 6.0.3.5'
 gem 'sinatra-activerecord', '>= 2.0.14'
 gem 'pg'
 gem 'sinatra-websocket'
