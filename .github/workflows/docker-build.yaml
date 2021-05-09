@@ -6,24 +6,33 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    paths-ignore:
-      - 'infra/**'
     branches: [ master ]
   pull_request:
     branches: [ master ]
-    paths-ignore:
-      - 'infra/**'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # JOB to run change detection
+  changes:
+    runs-on: ubuntu-latest
+    # Set job outputs to values from filter step
+    outputs:
+      build: ${{ steps.filter.outputs.build }}
+    steps:
+    # For pull requests it's not necessary to checkout the code
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        filters: |
+          build:
+            - 'infra/**'
+
   # This workflow contains a single job called "build"
   docker-build:
-    # The type of runner that the job will run on
+    needs: changes
+    if: ${{ needs.changes.outputs.build == 'false' }}
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
       - name: Prepare
@@ -80,4 +89,15 @@ jobs:
           cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Image digest
-        run: echo ${{ steps.docker_build.outputs.digest }}        
+        run: echo ${{ steps.docker_build.outputs.digest }}
+
+  automerge:
+    # Extract this job when we have a check_suite created by other entity than github action
+    needs: docker-build
+    runs-on: ubuntu-latest    
+    steps:
+      - name: Merge me!
+        uses: ridedott/merge-me-action@master
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_LOGIN: snyk-bot        
