@@ -93,6 +93,7 @@ jobs:
 
   automerge:
     # Extract this job when we have a check_suite created by other entity than github action
+    if: success() 
     needs: docker-build
     runs-on: ubuntu-latest    
     steps:
