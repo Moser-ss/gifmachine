@@ -100,4 +100,5 @@ jobs:
         uses: ridedott/merge-me-action@master
         with:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GITHUB_LOGIN: snyk-bot        
+          GITHUB_LOGIN: snyk-bot
+          ENABLED_FOR_MANUAL_CHANGES: 'true'        
