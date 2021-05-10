@@ -1,4 +1,4 @@
-FROM ruby:2.6.5
+FROM ruby:2.6.6
 LABEL org.opencontainers.image.source https://github.com/Moser-ss/gifmachine
 EXPOSE 4567
 
